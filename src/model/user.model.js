@@ -2,6 +2,12 @@ import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
   {
+    fullName: {
+      type: String,
+      required: true,
+      trim: true,
+      index: true,
+    },
     username: {
       type: String,
       required: true,
@@ -17,22 +23,18 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
     },
-    fullName: {
+    password: {
       type: String,
-      required: true,
-      trim: true,
-      index: true,
+      required: [true, "Password is required"],
+    },
+    gender: {
+      type: String,
+      default: "Male",
+      enum: ["Male", "Female", "Other"],
     },
     avatar: {
       type: String, // cloudnary URL
       required: true,
-    },
-    coverImage: {
-      type: String, // cloudnary URL
-    },
-    password: {
-      type: String,
-      required: [true, "Password is required"],
     },
     refreshToken: {
       type: String,
