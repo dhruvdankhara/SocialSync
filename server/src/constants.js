@@ -1,5 +1,8 @@
 export const DB_NAME = "SocialSync";
 
+/**
+ * @type {{ ADMIN: "ADMIN"; USER: "USER"} as const}
+ */
 export const UserRolesEnum = {
   USER: "USER",
   ADMIN: "ADMIN",
