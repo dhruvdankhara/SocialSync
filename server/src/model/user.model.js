@@ -6,7 +6,7 @@ import {
   AvailableUserRoles,
   UserGenderEnum,
   UserRolesEnum,
-} from "../constants";
+} from "../constants.js";
 
 const userSchema = new mongoose.Schema(
   {
@@ -42,7 +42,6 @@ const userSchema = new mongoose.Schema(
     avatar: {
       type: String, // cloudnary URL
       default: "",
-      required: true,
     },
     role: {
       type: String,
@@ -76,8 +75,8 @@ userSchema.methods.generateAccessToken = function () {
       username: this.username,
       role: this.role,
     },
-    process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: process.env.ACCESS_TOKEN_EXPIRY }
+    process.env.JWT_SECRET,
+    { expiresIn: process.env.JWT_EXPIRY }
   );
 };
 
