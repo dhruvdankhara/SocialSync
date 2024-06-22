@@ -1,3 +1,5 @@
+import yup from "yup";
+
 import { UserRolesEnum } from "../constants.js";
 import User from "../model/user.model.js";
 import { ApiResponse } from "../util/ApiResponse.js";
@@ -7,21 +9,17 @@ const registerUser = async (req, res) => {
   try {
     const { name, username, email, password, role } = req.body;
 
-    const schema = Joi.object({
-      name: Joi.string().required(),
-      username: Joi.string().min(3).required(),
-      email: Joi.string().email().required(),
-      password: Joi.string().min(8).required(),
+    const schema = yup.object().shape({
+      password: yup.string().min(8).required(),
+      email: yup.string().email().required(),
+      username: yup.string().min(3).required(),
+      name: yup.string().required(),
     });
 
-    const { error } = schema.validate({ name, username, email, password });
-    if (error) {
-      // todo: handle error message
-      throw new ApiError(400, error);
-    }
+    await schema.validate({ name, username, email, password });
 
     const existingUser = await User.findOne({
-      $or: [{ username }, { email }],
+      $or: [{ username }, { email: email.toLowerCase() }],
     });
 
     if (existingUser) {
@@ -31,7 +29,7 @@ const registerUser = async (req, res) => {
     const newUser = await User.create({
       name,
       username,
-      email,
+      email: email.toLowerCase(),
       password,
       role: role || UserRolesEnum.USER,
     });
@@ -60,8 +58,12 @@ const loginUser = async (req, res) => {
       throw new ApiError(400, "username or email is required");
     }
 
+    if (!password) {
+      throw new ApiError(400, "password is required");
+    }
+
     const user = await User.findOne({
-      $or: [{ username }, { email }],
+      $or: [{ username }, { email: email.toLowerCase() }],
     });
 
     if (!user) {
