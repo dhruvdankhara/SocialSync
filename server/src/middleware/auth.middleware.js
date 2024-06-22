@@ -24,7 +24,9 @@ export const verifyJWT = async (req, res, next) => {
       throw new ApiError(401, "Unauthorized");
     }
 
-    const user = await User.findById(tokenData._id);
+    const user = await User.findById(tokenData._id).select(
+      "-password -__v -createdAt -updatedAt"
+    );
     if (!user) {
       throw new ApiError(401, "Unauthorized, User not found");
     }

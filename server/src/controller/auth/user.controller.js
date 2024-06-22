@@ -1,9 +1,9 @@
 import yup from "yup";
 
-import { UserRolesEnum } from "../constants.js";
-import User from "../model/user.model.js";
-import { ApiResponse } from "../util/ApiResponse.js";
-import { ApiError, handleApiError } from "../util/errorHandler.js";
+import { UserRolesEnum } from "../../constants.js";
+import User from "../../model/auth/user.model.js";
+import { ApiResponse } from "../../util/ApiResponse.js";
+import { ApiError, handleApiError } from "../../util/errorHandler.js";
 
 const registerUser = async (req, res) => {
   try {
@@ -63,8 +63,8 @@ const loginUser = async (req, res) => {
     }
 
     const user = await User.findOne({
-      $or: [{ username }, { email: email.toLowerCase() }],
-    });
+      $or: [{ username }, { email: email?.toLowerCase() }],
+    }).select("-__v -createdAt -updatedAt");
 
     if (!user) {
       throw new ApiError(404, "User not found. Please register first.");
@@ -92,4 +92,9 @@ const loginUser = async (req, res) => {
   }
 };
 
-export { registerUser, loginUser };
+const getCurrentUser = (req, res) => {
+  const response = new ApiResponse(200, req.user, "user get sucessfully.");
+  return res.status(response.statusCode).json(response);
+};
+
+export { registerUser, loginUser, getCurrentUser };

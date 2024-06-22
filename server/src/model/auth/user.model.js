@@ -6,7 +6,7 @@ import {
   AvailableUserRoles,
   UserGenderEnum,
   UserRolesEnum,
-} from "../constants.js";
+} from "../../constants.js";
 
 const userSchema = new mongoose.Schema(
   {
