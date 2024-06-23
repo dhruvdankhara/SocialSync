@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 
 import { ApiError, handleApiError } from "../util/errorHandler.js";
-import User from "../model/user.model.js";
+import User from "../model/auth/user.model.js";
 
 /**
  * Middleware function to verify JWT token and authenticate the user.

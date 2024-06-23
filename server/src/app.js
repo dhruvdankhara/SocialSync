@@ -17,7 +17,9 @@ app.use(express.static("public"));
 app.use(cookieParser());
 
 import userRouter from "./router/auth/user.js";
+import todoRouter from "./router/todo/todo.js";
 
 app.use("/api/v1/user", userRouter);
+app.use("/api/v1/todos", todoRouter);
 
 export default app;
