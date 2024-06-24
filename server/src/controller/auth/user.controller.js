@@ -97,4 +97,10 @@ const getCurrentUser = (req, res) => {
   return res.status(response.statusCode).json(response);
 };
 
-export { registerUser, loginUser, getCurrentUser };
+const logoutUser = (req, res) => {
+  res.clearCookie("token");
+  const response = new ApiResponse(200, null, "user logged out successfully.");
+  return res.status(response.statusCode).json(response);
+};
+
+export { registerUser, loginUser, getCurrentUser, logoutUser };
